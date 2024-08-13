@@ -3,6 +3,7 @@ import "./Styles.css";
 import { useAuth } from "./Context/useAuth";
 import Logo from "./assets/logo.svg";
 import Log from "./assets/logout.svg";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   const { Logout } = useAuth();
@@ -20,9 +21,11 @@ const Sidebar = () => {
           <button className="btn btn-primary btn-outline-light my-2 mx-auto w-75">
             Dashboard
           </button>
-          <button className="btn btn-primary btn-outline-light my-2 mx-auto w-75">
-            Add Students
-          </button>
+          <Link to={"/add-students"}>
+            <button className="btn btn-primary btn-outline-light my-2 mx-auto w-75">
+              Add Students
+            </button>
+          </Link>
         </div>
         <div
           className="logout-div d-flex gap-2 align-items-center justify-content-center mt-auto mb-4 h-50"

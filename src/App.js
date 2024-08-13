@@ -6,6 +6,7 @@ import { AuthProvider } from "./Components/Context/useAuth";
 import Login from "./Components/Login";
 import Dashboard from "./Components/Dashboard";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import Addstudents from "./Components/Addstudents";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/add-students" element={<Addstudents />} />
         </Routes>
       </AuthProvider>
     </Router>
