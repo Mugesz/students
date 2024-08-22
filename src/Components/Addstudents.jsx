@@ -5,6 +5,7 @@ import Band from "./assets/school-stud.jpg";
 import "./Styles.css";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { imagedb } from "../Config/firebase";
+import axios from "axios";
 
 const validate = (values) => {
   const errors = {};
@@ -27,16 +28,16 @@ const validate = (values) => {
     errors.mobile = "Mobile number must be 10 digits";
   }
 
-  if (!values.fathersName) {
-    errors.fathersName = "Required";
+  if (!values.fathers) {
+    errors.fathers = "Required";
   }
 
-  if (!values.mothersName) {
-    errors.mothersName = "Required";
+  if (!values.mothers) {
+    errors.mothers = "Required";
   }
 
-  if (!values.className) {
-    errors.className = "Required";
+  if (!values.class) {
+    errors.class = "Required";
   }
 
   if (!values.image) {
@@ -65,23 +66,21 @@ const Addstudents = () => {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setLoading(true); // Set loading to true during upload
+        setLoading(true);
       },
       (error) => {
         console.error("Error uploading image:", error);
-        setLoading(false); // Stop loading on error
+        setLoading(false);
       },
       async () => {
         try {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
           setImageFileUrl(downloadURL);
           setUploadCompleted(true);
-          setLoading(false); // Stop loading once upload is complete
+          setLoading(false);
         } catch (error) {
           console.error("Error getting download URL:", error);
-          setLoading(false); // Stop loading on error
+          setLoading(false);
         }
       }
     );
@@ -98,15 +97,34 @@ const Addstudents = () => {
       name: "",
       age: "",
       mobile: "",
-      fathersName: "",
-      mothersName: "",
-      className: "",
+      fathers: "",
+      mothers: "",
+      class: "",
       image: null,
     },
     validate,
     onSubmit: async (values, { resetForm }) => {
-      console.log("Form Data: ", values);
-      resetForm();
+      try {
+        setLoading(true);
+        if (uploadCompleted) {
+          values.image = imageFileUrl;
+          const response = await axios.post(
+            `http://localhost:4550/details/create-students`,
+            values
+          );
+
+          console.log("Student saved:", response.data);
+
+          resetForm();
+        } else {
+          console.error("Image upload not completed yet");
+          alert("Please wait until the image upload is complete.");
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
@@ -123,7 +141,7 @@ const Addstudents = () => {
       </div>
       <div className="w-75 p-4" style={{ backgroundColor: "#d9d9d9" }}>
         <div className="banner">
-          <img className="tops" src={Band} alt="" />
+          <img className="tops" src={Band} alt="Student banner" />
         </div>
         <h2>Add Student</h2>
         <form onSubmit={formik.handleSubmit}>
@@ -185,61 +203,61 @@ const Addstudents = () => {
 
           <div className="row mb-3">
             <div className="col-md-4">
-              <label htmlFor="fathersName" className="form-label">
+              <label htmlFor="fathers" className="form-label">
                 Father's Name <span className="text-danger">*</span>
               </label>
               <input
-                id="fathersName"
-                name="fathersName"
+                id="fathers"
+                name="fathers"
                 type="text"
                 className="form-control"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.fathersName}
+                value={formik.values.fathers}
               />
-              {formik.touched.fathersName && formik.errors.fathersName ? (
-                <div className="text-danger">{formik.errors.fathersName}</div>
+              {formik.touched.fathers && formik.errors.fathers ? (
+                <div className="text-danger">{formik.errors.fathers}</div>
               ) : null}
             </div>
 
             <div className="col-md-4">
-              <label htmlFor="mothersName" className="form-label">
+              <label htmlFor="mothers" className="form-label">
                 Mother's Name <span className="text-danger">*</span>
               </label>
               <input
-                id="mothersName"
-                name="mothersName"
+                id="mothers"
+                name="mothers"
                 type="text"
                 className="form-control"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.mothersName}
+                value={formik.values.mothers}
               />
-              {formik.touched.mothersName && formik.errors.mothersName ? (
-                <div className="text-danger">{formik.errors.mothersName}</div>
+              {formik.touched.mothers && formik.errors.mothers ? (
+                <div className="text-danger">{formik.errors.mothers}</div>
               ) : null}
             </div>
 
             <div className="col-md-4">
-              <label htmlFor="className" className="form-label">
+              <label htmlFor="class" className="form-label">
                 Class <span className="text-danger">*</span>
               </label>
               <input
-                id="className"
-                name="className"
+                id="class"
+                name="class"
                 type="text"
                 className="form-control"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.className}
+                value={formik.values.class}
               />
-              {formik.touched.className && formik.errors.className ? (
-                <div className="text-danger">{formik.errors.className}</div>
+              {formik.touched.class && formik.errors.class ? (
+                <div className="text-danger">{formik.errors.class}</div>
               ) : null}
             </div>
           </div>
 
-          <div className="mb-3 w-25">
+          <div className="mb-3 w-50">
             <label htmlFor="image" className="form-label">
               Image <span className="text-danger">*</span>
             </label>
@@ -256,19 +274,26 @@ const Addstudents = () => {
             ) : null}
           </div>
 
-          {loading ? (
-            <div className="mb-3">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Uploading...</span>
-              </div>
-              <span className="ms-2">Uploading image...</span>
-            </div>
-          ) : null}
-
-          <button type="submit" className="btn btn-primary" disabled={loading}>
-            Submit
+          <button
+            type="submit"
+            className="btn btn-primary mt-3"
+            disabled={loading}
+          >
+            {loading ? "Submitting..." : "Submit"}
           </button>
         </form>
+
+        {/* Display uploaded image after submission */}
+        {uploadCompleted && imageFileUrl && (
+          <div className="mt-4">
+            <h4>Uploaded Image:</h4>
+            <img
+              src={imageFileUrl}
+              alt="Uploaded"
+              style={{ maxWidth: "100%", height: "auto" }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
