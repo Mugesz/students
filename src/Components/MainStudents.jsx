@@ -1,6 +1,7 @@
 import React from "react";
 import "./Styles.css";
 import Stud from "./assets/classroom.jpg";
+import { Link } from "react-router-dom";
 
 const MainStudents = () => {
   return (
@@ -15,7 +16,11 @@ const MainStudents = () => {
                 className=" banner-img vh-100"
               />
               <div className="glass-effect d-flex justify-content-center align-items-center">
-                <button className="btn text-white"><h3>View All Students</h3></button>
+                <Link className="" to={"/All-students"}>
+                  <button className="btn text-white">
+                    <h3>View All Students</h3>
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

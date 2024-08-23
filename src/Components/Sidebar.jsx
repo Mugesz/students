@@ -13,9 +13,9 @@ const Sidebar = () => {
   return (
     <div className="mains w-25 position-fixed sidebar-bg vh-100 d-flex flex-column align-items-center">
       <div className="content-div w-100 text-center">
-        <h5 className="text-white mt-2">Student Registration System</h5>
+        <h5 className=" fw-bolder mt-2">Student Registration System</h5>
         <div className="imagediv d-flex justify-content-center mt-5">
-          <img src={Logo} alt="Logo image" />
+          <img src={Logo} alt="Logo image" height="250px" width="250px" />
         </div>
         <div className="button-div d-flex flex-column mt-5 w-100">
           <Link to={"/dashboard"}>

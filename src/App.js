@@ -7,6 +7,8 @@ import Login from "./Components/Login";
 import Dashboard from "./Components/Dashboard";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import Addstudents from "./Components/Addstudents";
+import Viewonestudents from "./Components/Viewonestudents";
+import Viewallstudents from "./Components/Viewallstudents";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             }
           />
           <Route path="/add-students" element={<Addstudents />} />
+          <Route path="/view-one-students/:id" element={<Viewonestudents />} />
+          <Route path="/All-students" element={<Viewallstudents />} />
         </Routes>
       </AuthProvider>
     </Router>
