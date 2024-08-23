@@ -1,7 +1,7 @@
 import React from "react";
 import "./Styles.css";
 import { useAuth } from "./Context/useAuth";
-import Logo from "./assets/logo.svg";
+import Logo from "./assets/logus.png";
 import Log from "./assets/logout.svg";
 import { Link } from "react-router-dom";
 
@@ -18,17 +18,20 @@ const Sidebar = () => {
           <img src={Logo} alt="Logo image" />
         </div>
         <div className="button-div d-flex flex-column mt-5 w-100">
-          <button className="btn btn-primary btn-outline-light my-2 mx-auto w-75">
-            Dashboard
-          </button>
+          <Link to={"/dashboard"}>
+            <button className="btn bg-btn btn-outline-light my-2 mx-auto w-75">
+              Dashboard
+            </button>
+          </Link>
+
           <Link to={"/add-students"}>
-            <button className="btn btn-primary btn-outline-light my-2 mx-auto w-75">
+            <button className="btn bg-btn btn-outline-light my-2 mx-auto w-75">
               Add Students
             </button>
           </Link>
         </div>
         <div
-          className="logout-div d-flex gap-2 align-items-center justify-content-center mt-auto mb-4 h-50"
+          className="logout-div d-flex gap-2 align-items-center justify-content-center mt-5"
           onClick={handleLogout}
         >
           <img src={Log} alt="logout icon" />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import Sidebar from "./Sidebar";
-import Band from "./assets/school-stud.jpg";
+import Band from "./assets/freepik.jpg";
 import "./Styles.css";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { imagedb } from "../Config/firebase";
@@ -139,152 +139,152 @@ const Addstudents = () => {
       <div className="w-25">
         <Sidebar />
       </div>
-      <div className="w-75 p-4" style={{ backgroundColor: "#d9d9d9" }}>
-        <div className="banner">
+      <div className="w-75">
+        <div className="banner blur">
           <img className="tops" src={Band} alt="Student banner" />
+          <div className="form-container">
+            <h2 className=" text-light text-center">Add Student</h2>
+            <form onSubmit={formik.handleSubmit}>
+              <div className="row mb-3 mt-4 text-white">
+                <div className="col-md-4 text-white">
+                  <label htmlFor="name" className="form-label">
+                    Name <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.name}
+                  />
+                  {formik.touched.name && formik.errors.name ? (
+                    <div className="text-danger">{formik.errors.name}</div>
+                  ) : null}
+                </div>
+
+                <div className="col-md-4">
+                  <label htmlFor="age" className="form-label">
+                    Age <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="age"
+                    name="age"
+                    type="text"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.age}
+                  />
+                  {formik.touched.age && formik.errors.age ? (
+                    <div className="text-danger">{formik.errors.age}</div>
+                  ) : null}
+                </div>
+
+                <div className="col-md-4">
+                  <label htmlFor="mobile" className="form-label">
+                    Mobile <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="mobile"
+                    name="mobile"
+                    type="text"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.mobile}
+                  />
+                  {formik.touched.mobile && formik.errors.mobile ? (
+                    <div className="text-danger">{formik.errors.mobile}</div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="row mb-4 text-white">
+                <div className="col-md-4">
+                  <label htmlFor="fathers" className="form-label">
+                    Father's Name <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="fathers"
+                    name="fathers"
+                    type="text"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.fathers}
+                  />
+                  {formik.touched.fathers && formik.errors.fathers ? (
+                    <div className="text-danger">{formik.errors.fathers}</div>
+                  ) : null}
+                </div>
+
+                <div className="col-md-4">
+                  <label htmlFor="mothers" className="form-label">
+                    Mother's Name <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="mothers"
+                    name="mothers"
+                    type="text"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.mothers}
+                  />
+                  {formik.touched.mothers && formik.errors.mothers ? (
+                    <div className="text-danger">{formik.errors.mothers}</div>
+                  ) : null}
+                </div>
+
+                <div className="col-md-4">
+                  <label htmlFor="class" className="form-label">
+                    Class <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    id="class"
+                    name="class"
+                    type="text"
+                    className="form-control"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.class}
+                  />
+                  {formik.touched.class && formik.errors.class ? (
+                    <div className="text-danger">{formik.errors.class}</div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="mb-3 w-50 text-white">
+                <label htmlFor="image" className="form-label">
+                  Image <span className="text-danger">*</span>
+                </label>
+                <input
+                  id="image"
+                  name="image"
+                  type="file"
+                  className="form-control"
+                  onChange={handleImageChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.image && formik.errors.image ? (
+                  <div className="text-danger">{formik.errors.image}</div>
+                ) : null}
+              </div>
+
+              <button
+                type="submit"
+                className="btn btn-primary mt-3"
+                disabled={loading}
+              >
+                {loading ? "Submitting..." : "Submit"}
+              </button>
+            </form>
+          </div>
         </div>
-        <h2>Add Student</h2>
-        <form onSubmit={formik.handleSubmit}>
-          <div className="row mb-3 mt-4">
-            <div className="col-md-4">
-              <label htmlFor="name" className="form-label">
-                Name <span className="text-danger">*</span>
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.name}
-              />
-              {formik.touched.name && formik.errors.name ? (
-                <div className="text-danger">{formik.errors.name}</div>
-              ) : null}
-            </div>
-
-            <div className="col-md-4">
-              <label htmlFor="age" className="form-label">
-                Age <span className="text-danger">*</span>
-              </label>
-              <input
-                id="age"
-                name="age"
-                type="text"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.age}
-              />
-              {formik.touched.age && formik.errors.age ? (
-                <div className="text-danger">{formik.errors.age}</div>
-              ) : null}
-            </div>
-
-            <div className="col-md-4">
-              <label htmlFor="mobile" className="form-label">
-                Mobile <span className="text-danger">*</span>
-              </label>
-              <input
-                id="mobile"
-                name="mobile"
-                type="text"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.mobile}
-              />
-              {formik.touched.mobile && formik.errors.mobile ? (
-                <div className="text-danger">{formik.errors.mobile}</div>
-              ) : null}
-            </div>
-          </div>
-
-          <div className="row mb-3">
-            <div className="col-md-4">
-              <label htmlFor="fathers" className="form-label">
-                Father's Name <span className="text-danger">*</span>
-              </label>
-              <input
-                id="fathers"
-                name="fathers"
-                type="text"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.fathers}
-              />
-              {formik.touched.fathers && formik.errors.fathers ? (
-                <div className="text-danger">{formik.errors.fathers}</div>
-              ) : null}
-            </div>
-
-            <div className="col-md-4">
-              <label htmlFor="mothers" className="form-label">
-                Mother's Name <span className="text-danger">*</span>
-              </label>
-              <input
-                id="mothers"
-                name="mothers"
-                type="text"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.mothers}
-              />
-              {formik.touched.mothers && formik.errors.mothers ? (
-                <div className="text-danger">{formik.errors.mothers}</div>
-              ) : null}
-            </div>
-
-            <div className="col-md-4">
-              <label htmlFor="class" className="form-label">
-                Class <span className="text-danger">*</span>
-              </label>
-              <input
-                id="class"
-                name="class"
-                type="text"
-                className="form-control"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.class}
-              />
-              {formik.touched.class && formik.errors.class ? (
-                <div className="text-danger">{formik.errors.class}</div>
-              ) : null}
-            </div>
-          </div>
-
-          <div className="mb-3 w-50">
-            <label htmlFor="image" className="form-label">
-              Image <span className="text-danger">*</span>
-            </label>
-            <input
-              id="image"
-              name="image"
-              type="file"
-              className="form-control"
-              onChange={handleImageChange}
-              onBlur={formik.handleBlur}
-            />
-            {formik.touched.image && formik.errors.image ? (
-              <div className="text-danger">{formik.errors.image}</div>
-            ) : null}
-          </div>
-
-          <button
-            type="submit"
-            className="btn btn-primary mt-3"
-            disabled={loading}
-          >
-            {loading ? "Submitting..." : "Submit"}
-          </button>
-        </form>
-
-        {/* Display uploaded image after submission */}
-        {uploadCompleted && imageFileUrl && (
+        {/* {uploadCompleted && imageFileUrl && (
           <div className="mt-4">
             <h4>Uploaded Image:</h4>
             <img
@@ -293,7 +293,7 @@ const Addstudents = () => {
               style={{ maxWidth: "100%", height: "auto" }}
             />
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

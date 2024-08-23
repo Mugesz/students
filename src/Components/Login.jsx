@@ -1,4 +1,3 @@
-// Login.js
 import React, { useEffect } from "react";
 import { useAuth } from "./Context/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +25,7 @@ const Login = () => {
         <div className="col-6 d-flex flex-column justify-content-center align-items-center">
           <div className="text-center">
             <img src={Stud} alt="Student" className="img-fluid mb-4" />
-            <button onClick={googleLogin} className="btn bg-button text-white">
+            <button onClick={googleLogin} className="btn bg-button text-white d-block mx-auto">
               Login with Google
             </button>
           </div>
