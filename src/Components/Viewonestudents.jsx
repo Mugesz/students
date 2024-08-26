@@ -26,10 +26,10 @@ const Viewonestudents = () => {
 
   return (
     <div className="d-flex flex-column flex-md-row">
-      <div className="w-25">
+      <div className="w-25 sidebar">
         <Sidebar />
       </div>
-      <div className="w-75  p-4">
+      <div className="w-75 mobile-custom  p-4">
         <div className="container bg-light p-4 rounded shadow-sm">
           {student ? (
             <>

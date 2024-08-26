@@ -53,10 +53,10 @@ const Viewallstudents = () => {
 
   return (
     <div className="d-flex">
-      <div className="w-25">
+      <div className="w-25 sidebar">
         <Sidebar />
       </div>
-      <div className="w-75">
+      <div className="w-75 mobile-custom">
         <table className="table table-bordered text-center">
           <thead>
             <tr>

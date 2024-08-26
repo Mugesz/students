@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const MainStudents = () => {
   return (
     <>
-      <div className="w-100">
+      <div className=" mobile-custom w-100">
         <div className="content-div-main vh-100">
           <div className="container vh-100">
             <div className="banner-div position-relative vh-100">

@@ -5,10 +5,10 @@ import Sidebar from "./Sidebar";
 const Dashboard = () => {
   return (
     <div className=" d-flex">
-      <div className="w-25">
+      <div className="w-25 sidebar">
         <Sidebar />
       </div>
-      <div className="w-75">
+      <div className="w-75 mobile-custom">
         {" "}
         <MainStudents />
       </div>
@@ -17,10 +17,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-{
-  /* <h3>Welcome, {userData.displayName}</h3>
-      <img src={userData.photoURL} alt="User Profile" />
-      <p>{userData.email}</p>
-      <button onClick={handleLogout}>Logout</button> */
-}

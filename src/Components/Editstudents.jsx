@@ -195,10 +195,10 @@ const Editstudents = () => {
 
   return (
     <div className="container-fluid d-flex">
-      <div className="w-25">
+      <div className="sidebar w-25">
         <Sidebar />
       </div>
-      <div className="w-75 position-relative">
+      <div className="mobile-custom w-75 position-relative">
         <div className="banner">
           <img className="img-fluid" src={Band} alt="Student banner" />
           <div className="form-container text-light p-4 rounded">
