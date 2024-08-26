@@ -1,12 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useFormik } from "formik";
-import Sidebar from "./Sidebar";
-import Band from "./assets/freepik.jpg";
-import "./Styles.css";
+import axios from "axios";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { imagedb } from "../Config/firebase";
-import axios from "axios";
 import { config } from "../Api";
+import { useParams } from "react-router-dom";
+import Sidebar from "./Sidebar";
+import Band from "./assets/freepik.jpg";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Styles.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const validate = (values) => {
   const errors = {};
@@ -54,12 +58,44 @@ const validate = (values) => {
   return errors;
 };
 
-const Addstudents = () => {
+const Editstudents = () => {
+  const { id } = useParams(); // Get student ID from URL
+  const [studentData, setStudentData] = useState(null); // State to store fetched student data
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [uploadCompleted, setUploadCompleted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(null); // State for image preview
   const fileInputRef = useRef(null);
+
+  const fetchStudentData = async () => {
+    try {
+      const response = await axios.get(
+        `${config.Api}/details/get-one-students/${id}`
+      );
+      setStudentData(response.data);
+      formik.setValues({
+        name: response.data.name || "",
+        age: response.data.age || "",
+        mobile: response.data.mobile || "",
+        fathers: response.data.fathers || "",
+        mothers: response.data.mothers || "",
+        class: response.data.class || "",
+        image: response.data.image || null,
+      });
+
+      // Set preview URL for the existing image
+      if (response.data.image) {
+        setPreviewUrl(response.data.image);
+      }
+    } catch (error) {
+      console.error("Error fetching student data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStudentData(); // Fetch student data on component mount
+  }, [id]);
 
   const uploadImage = async () => {
     const storageRef = ref(imagedb, new Date().getTime() + imageFile.name);
@@ -80,9 +116,11 @@ const Addstudents = () => {
           setImageFileUrl(downloadURL);
           setUploadCompleted(true);
           setLoading(false);
+          toast.success("Student Edited successfully!");
         } catch (error) {
           console.error("Error getting download URL:", error);
           setLoading(false);
+          toast.error("Failed to Edit students.");
         }
       }
     );
@@ -110,17 +148,16 @@ const Addstudents = () => {
         setLoading(true);
         if (uploadCompleted) {
           values.image = imageFileUrl;
-          const response = await axios.post(
-            `${config.Api}/details/create-students`,
+          const response = await axios.put(
+            `${config.Api}/details/edit-students/${id}`,
             values
           );
-
-          console.log("Student saved:", response.data);
-
-          resetForm();
+          console.log("Student updated:", response.data);
+          formik.resetForm();
           setImageFile(null);
+          setPreviewUrl(null);
           if (fileInputRef.current) {
-            fileInputRef.current.value = ""; 
+            fileInputRef.current.value = "";
           }
         } else {
           console.error("Image upload not completed yet");
@@ -138,21 +175,37 @@ const Addstudents = () => {
     const file = event.currentTarget.files[0];
     formik.setFieldValue("image", file);
     setImageFile(file);
+
+    if (file) {
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
+    } else {
+      setPreviewUrl(null); // Clear preview if no file is selected
+    }
   };
 
+  // Clean up the URL object when the component is unmounted or when a new file is selected
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl); // Revoke the object URL to avoid memory leaks
+      }
+    };
+  }, [previewUrl]);
+
   return (
-    <div className="d-flex">
+    <div className="container-fluid d-flex">
       <div className="w-25">
         <Sidebar />
       </div>
-      <div className="w-75">
-        <div className="banner blur">
-          <img className="tops" src={Band} alt="Student banner" />
-          <div className="form-container">
-            <h2 className="text-light text-center">Add Student</h2>
+      <div className="w-75 position-relative">
+        <div className="banner">
+          <img className="img-fluid" src={Band} alt="Student banner" />
+          <div className="form-container text-light p-4 rounded">
+            <h2 className="text-center">Edit Student</h2>
             <form onSubmit={formik.handleSubmit}>
-              <div className="row mb-3 mt-4 text-white">
-                <div className="col-md-4 text-white">
+              <div className="row mb-3 mt-4">
+                <div className="col-md-4">
                   <label htmlFor="name" className="form-label">
                     Name <span className="text-danger">*</span>
                   </label>
@@ -207,7 +260,7 @@ const Addstudents = () => {
                 </div>
               </div>
 
-              <div className="row mb-4 text-white">
+              <div className="row mb-4">
                 <div className="col-md-4">
                   <label htmlFor="fathers" className="form-label">
                     Father's Name <span className="text-danger">*</span>
@@ -263,7 +316,7 @@ const Addstudents = () => {
                 </div>
               </div>
 
-              <div className="mb-3 w-50 text-white">
+              <div className="mb-3 col-md-6">
                 <label htmlFor="image" className="form-label">
                   Image <span className="text-danger">*</span>
                 </label>
@@ -279,31 +332,32 @@ const Addstudents = () => {
                 {formik.touched.image && formik.errors.image ? (
                   <div className="text-danger">{formik.errors.image}</div>
                 ) : null}
+
+                {previewUrl && (
+                  <img
+                    src={previewUrl}
+                    alt="Image preview"
+                    className="img-fluid mt-2 rounded"
+                    style={{ maxHeight: "200px", objectFit: "contain" }}
+                  />
+                )}
               </div>
 
-              <button
-                type="submit"
-                className="btn btn-primary mt-3"
-                disabled={loading}
-              >
-                {loading ? "Submitting..." : "Submit"}
-              </button>
+              <div className="text-center mt-4">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loading}
+                >
+                  {loading ? "Updating..." : "Update Student"}
+                </button>
+              </div>
             </form>
           </div>
         </div>
-        {/* {uploadCompleted && imageFileUrl && (
-          <div className="mt-4">
-            <h4>Uploaded Image:</h4>
-            <img
-              src={imageFileUrl}
-              alt="Uploaded"
-              style={{ maxWidth: "100%", height: "auto" }}
-            />
-          </div>
-        )} */}
       </div>
     </div>
   );
 };
 
-export default Addstudents;
+export default Editstudents;

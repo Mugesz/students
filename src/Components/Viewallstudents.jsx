@@ -3,33 +3,52 @@ import Sidebar from "./Sidebar";
 import axios from "axios";
 import "./Styles.css";
 import Pagination from "./Pagination ";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faTrashArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { config } from "../Api";
+import { Link } from "react-router-dom";
+
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Viewallstudents = () => {
   const [students, setStudents] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // Track the current page
-  const [studentsPerPage] = useState(5); // Number of students per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const [studentsPerPage] = useState(5);
 
   const allStudents = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4550/details/get-all-students"
+        `${config.Api}/details/get-all-students`
       );
       setStudents(response.data);
     } catch (error) {
+      console.error("Error fetching students:", error);
+      toast.error("Failed to fetch students.");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${config.Api}/details/delete-students/${id}`);
+      setStudents(students.filter((student) => student._id !== id));
+      toast.success("Student deleted successfully!");
+    } catch (error) {
       console.log(error);
+      toast.error("Failed to delete student.");
     }
   };
 
   useEffect(() => {
     allStudents();
   }, []);
-
-  // Get current students
   const indexOfLastStudent = currentPage * studentsPerPage;
   const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
-  const currentStudents = students.slice(indexOfFirstStudent, indexOfLastStudent);
+  const currentStudents = students.slice(
+    indexOfFirstStudent,
+    indexOfLastStudent
+  );
 
-  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
@@ -41,10 +60,21 @@ const Viewallstudents = () => {
         <table className="table table-bordered text-center">
           <thead>
             <tr>
-              <th  className="table-row" scope="col">Student Image</th>
-              <th  className="table-row" scope="col">Student Name</th>
-              <th  className="table-row" scope="col">Student Age</th>
-              <th  className="table-row" scope="col">Student Class</th>
+              <th className="table-row" scope="col">
+                Student Image
+              </th>
+              <th className="table-row" scope="col">
+                Student Name
+              </th>
+              <th className="table-row" scope="col">
+                Student Age
+              </th>
+              <th className="table-row" scope="col">
+                Student Class
+              </th>
+              <th className="table-row" scope="col">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -61,6 +91,20 @@ const Viewallstudents = () => {
                 <td>{item.name}</td>
                 <td>{item.age}</td>
                 <td>{item.class}</td>
+                <td>
+                  <Link to={`/view-one-students/${item._id}`}>
+                    <button className="btn btn-secondary mx-2">
+                      <FontAwesomeIcon icon={faEye} />
+                    </button>
+                  </Link>
+
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(item._id)}
+                  >
+                    <FontAwesomeIcon icon={faTrashArrowUp} />
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
