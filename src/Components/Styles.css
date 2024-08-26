@@ -4,6 +4,13 @@
   width: 50%;
 }
 
+ul {
+  list-style-type: none;
+}
+.mobile-nav{
+  display: none;
+}
+
 .bg-button {
   background-color: #a11730 !important;
 }
@@ -152,11 +159,14 @@
     box-shadow: none;
     z-index: 1000;
   }
-  .login-custom{
+  .login-custom {
     flex-direction: column;
   }
-  .bg-clr{
+  .bg-clr {
     height: 50%;
     width: 100%;
+  }
+  .mobile-nav{
+    display: block;
   }
 }
