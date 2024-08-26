@@ -59,13 +59,13 @@ const validate = (values) => {
 };
 
 const Editstudents = () => {
-  const { id } = useParams(); // Get student ID from URL
-  const [studentData, setStudentData] = useState(null); // State to store fetched student data
+  const { id } = useParams(); 
+  const [studentData, setStudentData] = useState(null); 
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [uploadCompleted, setUploadCompleted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState(null); // State for image preview
+  const [previewUrl, setPreviewUrl] = useState(null); 
   const fileInputRef = useRef(null);
 
   const fetchStudentData = async () => {
@@ -84,7 +84,7 @@ const Editstudents = () => {
         image: response.data.image || null,
       });
 
-      // Set preview URL for the existing image
+    
       if (response.data.image) {
         setPreviewUrl(response.data.image);
       }
@@ -94,7 +94,7 @@ const Editstudents = () => {
   };
 
   useEffect(() => {
-    fetchStudentData(); // Fetch student data on component mount
+    fetchStudentData(); 
   }, [id]);
 
   const uploadImage = async () => {
@@ -153,7 +153,7 @@ const Editstudents = () => {
             values
           );
           console.log("Student updated:", response.data);
-          formik.resetForm();
+          resetForm();
           setImageFile(null);
           setPreviewUrl(null);
           if (fileInputRef.current) {
@@ -180,15 +180,15 @@ const Editstudents = () => {
       const objectUrl = URL.createObjectURL(file);
       setPreviewUrl(objectUrl);
     } else {
-      setPreviewUrl(null); // Clear preview if no file is selected
+      setPreviewUrl(null); 
     }
   };
 
-  // Clean up the URL object when the component is unmounted or when a new file is selected
+ 
   useEffect(() => {
     return () => {
       if (previewUrl) {
-        URL.revokeObjectURL(previewUrl); // Revoke the object URL to avoid memory leaks
+        URL.revokeObjectURL(previewUrl); 
       }
     };
   }, [previewUrl]);
